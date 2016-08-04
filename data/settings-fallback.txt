@@ -1,0 +1,34 @@
+# This file is an overlay used to replace the %RANDOMIZE% placeholders in the default 
+# file with other values in the unlikely event that someone uses ABPTTS incorrectly.
+# 
+# Do not alter the content of this file.
+headerNameKey:::::::x-xsession-id
+headerValueKey:::::::tQgGur6TFdW9YMbiyuaj9g6yBJb2tCbcgrEq
+encryptionKeyHex:::::::63688c4f211155c76f2948ba21ebaf83
+accessKeyMode:::::::header
+headerValueUserAgent:::::::Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1)
+paramNameAccessKey:::::::accesskey
+paramNameOperation:::::::op
+paramNameDestinationHost:::::::host
+paramNameDestinationPort:::::::port
+paramNameConnectionID:::::::connection
+paramNameData:::::::data
+paramNameEncryptedBlock:::::::encryptedblock
+opModeStringOpenConnection:::::::open
+opModeStringSendReceive:::::::sr
+opModeStringCloseConnection:::::::close
+responseStringHide:::::::OK
+responseStringConnectionCreated:::::::OPENED
+responseStringConnectionClosed:::::::CLOSED
+responseStringData:::::::DATA
+responseStringNoData:::::::NO_DATA
+responseStringErrorGeneric:::::::ERROR
+responseStringErrorInvalidRequest:::::::ERROR_INVALID_REQUEST
+responseStringErrorConnectionNotFound:::::::ERROR_CONNECTION_NOT_FOUND
+responseStringErrorConnectionOpenFailed:::::::ERROR_CONNECTION_OPEN_FAILED
+responseStringErrorConnectionCloseFailed:::::::ERROR_CONNECTION_CLOSE_FAILED
+responseStringErrorConnectionSendFailed:::::::ERROR_CONNECTION_SEND_FAILED
+responseStringErrorConnectionReceiveFailed:::::::ERROR_CONNECTION_RECEIVE_FAILED
+responseStringErrorDecryptFailed:::::::ERROR_DECRYPT_FAILED
+responseStringErrorEncryptFailed:::::::ERROR_ENCRYPT_FAILED
+responseStringErrorEncryptionNotSupported:::::::ERROR_ENCRYPTION_NOT_SUPPORTED

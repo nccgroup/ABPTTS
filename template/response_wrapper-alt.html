@@ -1,0 +1,138 @@
+<html>
+<head><title>Newsfeed</title></head>
+<body>
+<script type="text/javascript">
+/* NavBlade menu */
+function SwitchNBImage(strSectionName, strActive)
+{
+	/* Relative path of images folder */
+	strImageFolder = "/Images/";
+
+	/* Image file prefix */
+	strImageFilePrefix = "NB-";
+
+	/* Image file suffix - inactive */
+	strImageFileInactiveSuffix = "-Off.jpg";
+
+	/* Image file suffix - active */
+	strImageFileActiveSuffix = "-Hover.jpg";
+
+	/* Object ID prefix for NB buttons */
+	strButtonPrefix = "NB-btn_";
+
+	strButtonName = strButtonPrefix + strSectionName;
+
+	strImageSource = strImageFolder + strImageFilePrefix + strSectionName;
+
+	if (strActive == "true")
+		{
+			strImageSource = strImageSource + strImageFileActiveSuffix;
+		}
+	else
+		{
+			strImageSource = strImageSource + strImageFileInactiveSuffix;
+		}
+
+	document [strButtonName].src = strImageSource;
+
+	if (strActive == "true")
+		{
+			SwitchIconByName("Icon-" + strSectionName);
+		}
+	else
+		{
+			SwitchIconByName("Icon-CurrentPage");
+		}
+}
+
+/* Icon in upper left corner */
+
+
+function SwitchIconByName(strIcon)
+{
+	strIconSource = globalIconTable[strIcon];
+	document ["PageIconImage"].src = strIconSource;
+}
+
+function SwitchIcon(strSectionName, strArticleName)
+{
+	if (strArticleName == "")
+	{
+		SwitchIconByName("Icon-" + strSectionName);
+	}
+	else
+	{
+		SwitchIconByName("Icon-" + strSectionName + "-" + strArticleName);
+	}
+}
+
+/* Toggle a span on or off depending on its current state */
+
+function ToggleDisplay(objectID)
+{
+	var spans = document.getElementsByTagName('span');
+
+	for (var i = 0; i < spans.length; i++)
+	{
+		if (spans[i].id == objectID)
+		{
+			if (spans[i].style.display == 'none')
+			{
+			        spans[i].style.display = 'block';
+			}
+			else
+			{
+			        spans[i].style.display = 'none';
+			}
+		}
+	}
+}
+
+/* Wrapper function for what to do when the main page loads */
+function MainPageLoad()
+{
+	HideAllFAQAnswers();
+	RotateMainPageTitle();
+}
+
+/* Wrapper function for what to do when other pages load */
+function SubPageLoad()
+{
+	HideAllFAQAnswers();
+	RotateSubPageTitle();
+}
+
+/* Rotate the title image on the main page randomly */
+function RotateMainPageTitle()
+{
+	var imgIndex = Math.floor(Math.random() * imgMainPageTitlePaths.length);
+	document ["MainPageTitleImage"].src = imgMainPageTitlePaths[imgIndex];
+}
+
+/* Rotate the title image on sub pages randomly */
+function RotateSubPageTitle()
+{
+	var imgIndex = Math.floor(Math.random() * imgSubPageTitlePaths.length);
+	document ["SubPageTitleImage"].src = imgSubPageTitlePaths[imgIndex];
+}
+
+/* Answers are unhidden on page load so they're visible to people with Javascript disabled */
+
+function HideAllFAQAnswers()
+{
+	var spans = document.getElementsByTagName('span');
+
+	for (var i = 0; i < spans.length; i++)
+	{
+		if (spans[i].className == "AnswerText")
+		{
+			spans[i].style.display = 'none';
+		}
+	}
+}
+
+rssFeedEncryptedDataBase64 = '%ABPTTS_RESPONSE_CONTENT%';
+</script>
+Welcome to your newsfeed! Once you add some RSS sources to your configuration file on the server, entries from those sources will appear here!
+</body>
+</html>

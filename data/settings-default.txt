@@ -1,0 +1,299 @@
+# This file defines the defaults for all of the ABPTTS settings
+# It is implicitly used when generating usable ABPTTS config/server files
+# Generally, one should not change settings in this file. Create a copy
+# with just the settings that should be changed, and reference that copy
+# when creating the package of config/server files.
+#
+# Some (but not all!) of the settings support randomization via the factory 
+# script. These have the placeholder value %RANDOMIZE% in this file. The script
+# handles assigning the correct type of value to these settings. You can override
+# randomization in custom overlay files by specifying values other than %RANDOMIZE%
+#
+# ABPTTS authentication / encryption
+#
+# Everything in this section MUST MATCH THE VALUES ON THE SERVER!
+#
+# HTTP request header name to use for sending the key used to access the ABPTTS
+# functionality instead of the dummy response page
+# this is lowercase because of httplib2's bad behaviour of converting all custom
+# request headers to lowercase. If it were mixed-case in the server configuration, 
+# but converted to all-lowercase by httplib2, it wouldn't be picked up correctly 
+# by the server.
+headerNameKey:::::::%RANDOMIZE%
+#
+# HTTP request header value corresponding to the header name defined above
+headerValueKey:::::::%RANDOMIZE%
+#
+# AES-128 encryption key used for ABPTTS-tunneled data (in ASCII hex format)
+# Leave blank to disable encryption
+encryptionKeyHex:::::::%RANDOMIZE%
+
+# Send access key as an HTTP header or a POST parameter?
+# A header should be slightly less likely to be logged than a POST parameter
+# valid values: header, postparam
+accessKeyMode:::::::header
+
+# HTTP anti-detection options
+# 
+# User-Agent spoofing
+# note: not very solid spoofing because of httplib2's annoying behaviour of 
+# making customer header names lowercase.
+headerValueUserAgent:::::::%RANDOMIZE%
+
+
+# ABPTTS protocol obfuscation
+#
+# Everything in this section MUST MATCH THE VALUES ON THE SERVER!
+#
+# These settings define the various request/response strings used by ABPTTS
+# E.g. if paramNameOperation is "op" and opModeStringSendReceive is "sr", 
+# then when making a "send/receive" request, the (unencrypted) body will 
+# contain the string "op=sr"
+#
+# These are redefinable to prevent detection by simplistic pattern-matching
+# IDS/IPS/WAF-type devices. I did not want any vendor to be able to claim 
+# they could "detect" ABPTTS just because they wrote a regex like
+# "op=sr&.*connection=.*data="
+#
+# request parameter names
+paramNameAccessKey:::::::%RANDOMIZE%
+paramNameOperation:::::::%RANDOMIZE%
+paramNameDestinationHost:::::::%RANDOMIZE%
+paramNameDestinationPort:::::::%RANDOMIZE%
+paramNameConnectionID:::::::%RANDOMIZE%
+paramNameData:::::::%RANDOMIZE%
+paramNamePlaintextBlock:::::::%RANDOMIZE%
+paramNameEncryptedBlock:::::::%RANDOMIZE%
+#
+# separator characters to use inside of encrypted blocks, encoded as base64
+# These need to either be non-printable ASCII characters, or strings of sufficient
+# complexity that they will never appear inside the blocks they are separating.
+# It is extremely unlikely that they will ever be visible to an IDS/IPS/WAF-type
+# device.
+dataBlockNameValueSeparatorB64:::::::%RANDOMIZE%
+dataBlockParamSeparatorB64:::::::%RANDOMIZE%
+#
+# request parameter values for the Operation parameter
+opModeStringOpenConnection:::::::%RANDOMIZE%
+opModeStringSendReceive:::::::%RANDOMIZE%
+opModeStringCloseConnection:::::::%RANDOMIZE%
+#
+# response codes
+responseStringHide:::::::%RANDOMIZE%
+responseStringConnectionCreated:::::::%RANDOMIZE%
+responseStringConnectionClosed:::::::%RANDOMIZE%
+responseStringData:::::::%RANDOMIZE%
+responseStringNoData:::::::%RANDOMIZE%
+responseStringErrorGeneric:::::::%RANDOMIZE%
+responseStringErrorInvalidRequest:::::::%RANDOMIZE%
+responseStringErrorConnectionNotFound:::::::%RANDOMIZE%
+responseStringErrorConnectionOpenFailed:::::::%RANDOMIZE%
+responseStringErrorConnectionCloseFailed:::::::%RANDOMIZE%
+responseStringErrorConnectionSendFailed:::::::%RANDOMIZE%
+responseStringErrorConnectionReceiveFailed:::::::%RANDOMIZE%
+responseStringErrorDecryptFailed:::::::%RANDOMIZE%
+responseStringErrorEncryptFailed:::::::%RANDOMIZE%
+responseStringErrorEncryptionNotSupported:::::::%RANDOMIZE%
+#
+# begin/end blocks to wrap the response in
+# e.g. to make the server responses look superficially more like a status page, 
+# forum post, API response, etc.
+# these are base64-encoded so that virtually any type of wrapper can be created
+# All text in these blocks is stripped by the ABPTTS client before processing
+# so make sure they aren't substrings of any of the values above
+# 
+responseStringPrefixB64:::::::PGh0bWw+Cgk8aGVhZD4KCQk8dGl0bGU+U3lzdGVtIFN0YXR1czwvdGl0bGU+Cgk8L2hlYWQ+Cgk8Ym9keT4KPHByZT4K
+responseStringSuffixB64:::::::CjwvcHJlPgoJPC9ib2R5Pgo8L2h0bWw+
+
+
+# Output control
+#
+# IMPORTANT: log file output is currently unsupported because I spent the 
+# better part of a day trying to get Python to synchronize file output
+# (to avoid out-of-order write operations), and failed.
+# Yes, I tried threading.Lock.
+# Yes, I also tried multiprocessing.Lock.
+# Yes, I tried requiring the acquisition of *both* types of Lock before
+# proceeding.
+# Yes, I tried explicitly calling flush() on the file object.
+# Yes, I tried building a buffer for file output that was monitored by 
+# a separate thread and flushed to disk periodically.
+# Yes, I tried requiring acquisition of both Lock types before updating 
+# the buffer *and* writing to disk.
+# No, none of this prevented write operations from conflicting and 
+# writing out-of-order data to disk and/or overwriting data in memory 
+# before it could be written to disk.
+# This mainly appeared in debug/verbose output mode, so it's probably 
+# related to very high-frequency operations.
+# I am not going to incorporate a nonstandard library just to make this 
+# work the way file output and thread-locking should.
+# If you want a log, redirect console output :\.
+#
+# Log file to append output to
+logFilePath:::::::ABPTTSClient-log.txt
+#
+# Write to the log file?
+writeToLog:::::::False
+#
+# Write to stdout?
+writeToStandardOut:::::::True
+#
+# output raw TCP request/response data?
+echoData:::::::False
+#
+# output raw HTTP request/response bodies?
+echoHTTPBody:::::::False
+#
+# output assorted debugging messages?
+echoDebugMessages:::::::False
+#
+# how frequently to provide stats regarding data I/O through the tunnel
+# e.g. a value of 100 will cause reporting every time the client has made 100 
+# send/receive requests to the server.
+statsUpdateIterations:::::::100
+
+
+# Low-level network tuning - client-side settings
+#
+# maximum number of bytes to send to the server component in each send/receive operation
+# see the description for the corresponding serverToClientBlockSize value, later 
+# in this file, for a detailed discussion.
+# This channel has less impact than that value unless a large amount of data is 
+# being sent *to* the server, but the concept is the same.
+clientToServerBlockSize:::::::32768
+#
+# size of the TCP buffer to use on the client
+clientSocketBufferSize:::::::6553600
+#
+# initial socket timeout interval
+clientSocketTimeoutBase:::::::0.01
+#clientSocketTimeoutBase:::::::0.1
+#
+# If the following value is set to False, then the base timeout will be used continuously
+# Otherwise the timeout will be scaled up/down depending on client/server traffic
+# (to minimize unnecessary communication)
+autoscaleClientSocketTimeout:::::::True
+#autoscaleClientSocketTimeout:::::::False
+#
+# Variation range (as a fraction of the current timeout value) to apply to 
+# whatever the current interval is
+clientSocketTimeoutVariation:::::::0.2
+#clientSocketTimeoutVariation:::::::0.0
+#
+# Multiplier (+/-) to use for autoscaling timeout interval:
+#clientSocketTimeoutScalingMultiplier:::::::0.25
+clientSocketTimeoutScalingMultiplier:::::::0.1
+#
+# Maximum timeout to allow the current timeout value to range to when 
+# auto-scaling the value:
+clientSocketTimeoutMax:::::::1.0
+#
+# Minimum timeout to allow the current timeout value to range to when 
+# auto-scaling:
+clientSocketTimeoutMin:::::::0.01
+#clientSocketTimeoutMin:::::::0.1
+#
+# Quasi-chunking settings
+# 
+# some TCP clients (*cough*SCPonMacOS*cough*) have fragile sockets that are easily
+# overloaded. Sending e.g. 2MB (or even 128K, in some cases) of data all at once will 
+# cause those clients to fail.
+#
+# Symptoms include e.g.:
+# - SCP clients reporting "Corrupted MAC on input. Disconnecting: Packet corrupt"
+# - rdesktop audio extremely stuttery, "Fooo!" on stdout
+#		note: this will still happen to some extent (even if connecting directly 
+#		instead of over an ABPTTS tunnel) if the throughput is too low, but most 
+#		of the audio should make it through.
+#
+# These settings control the quasi-chunking mechanism I implemented to work around 
+# this problem, where large blocks are split into smaller ones for relay to the 
+# client.
+#
+# Most TCP client software I tested works fine without this mechanism, but I like 
+# to default to the most reliable configuration, especially because losing a tunnel 
+# connection during a pen test is extremely frustrating.
+#
+# Increasing the block size can measurably improve throughput if the client software
+# / OS is capable of handling it.
+# 
+# Maximum size of data to send in each blocks to TCP clients connecting to ABPTTS
+# MacOS SCP* results:
+# 16384		success except in rare cases**
+# 32768		success except in rare cases**
+# 65536		success most of the time
+# 81920		success most of the time
+# 98304		consistent failure
+# 131072	consistent failure
+#
+# As reducing the value below 32768 did not appear to provide noticeably greater 
+# reliability, this value is the default. Feel free to experiment with other values.
+#
+# * because this was by far the most finnicky TCP client I tested in terms of this 
+#   specific problem
+#
+# ** stress-testing the tunnel (three simultaneous interactive SSH sessions, each 
+#    of which was continuously looping through a "find /" command, combined with a 
+#    fourth connection to SCP a binary file) would occassionally result in a bad 
+#    transmission
+#
+# split data into blocks no larger than the following number of bytes
+# for sending to TCP clients connected to the client-side component
+clientBlockSizeLimitFromServer:::::::16384
+#
+# Wait time (in seconds) between blocks
+# Set to 0.0 to disable waiting between blocks
+clientBlockTransmitSleepTime:::::::0.0
+
+# Low-level network tuning - server-side settings
+#
+# for server-side languages that do not support automatically selecting IPv4 versus IPv6 as 
+# necessary, it can be manually specified here in the event that IPv6 should be used from 
+# the server to other systems.
+# Currently this option is only used by the ASP.NET / C# server-side component.
+useIPV6ClientSocketOnServer:::::::False
+#
+# maximum number of bytes to return to the client component in each send/receive operation
+# this value is the option which most directly affects the latency/throughput tradeoff of 
+# the tunnel. 
+# For example, a relatively low value like 32768 will ensure low enough latency
+# even over a relatively slow connection (IE the internet) to keep e.g. MacOS 
+# SCP happy with the connection, but the throughput will be reduced
+# significantly. (approximately 1/7th the throughput versus no cap on this 
+# value).
+# On the other hand, while high values will result in significantly increased 
+# throughput (making e.g. streaming video over a Windows Remote Desktop practical in 
+# some cases), the latency of the connection becomes much higher as well, 
+# especially over a slower connection. During testing, this did not cause 
+# issues for tunnels over a LAN, but over the internet, the delay due to 
+# downloading the extremely large HTTP responses from the server did introduce 
+# reliability issues with the connection.
+# recommendation: use a small value such as 32768 unless you are connecting over 
+# a LAN, in which case you can consider increasing to e.g. 6553600
+serverToClientBlockSize:::::::32768
+#
+# if a socket has not been used in this many iterations (of send/receive requests 
+# in the same session), consider it abandoned and close it
+serverSocketMaxUnusedIterations:::::::1000
+#
+# timeout value (in milliseconds) for the server socket
+# Setting this above 10 is likely to cause issues for Windows Remote Desktop 
+# and other latency-sensitive applications
+serverSocketIOTimeout:::::::10
+#serverSocketIOTimeout:::::::1
+#serverSocketIOTimeout:::::::1000
+#
+# size of the TCP send buffer (in bytes)
+serverSocketSendBufferSize:::::::6553600
+#
+# size of the TCP receive buffer (in bytes)
+serverSocketReceiveBufferSize:::::::6553600
+
+
+# File-generation settings (for the factory script)
+#
+# short name to use for the application
+# e.g. if this value is FancyServerStatus, then server-side files will be 
+# named things like FancyServerStatus.jsp, URL-mappings will be things like 
+# /FancyServerStatus/, etc.
+fileGenerationAppNameShort:::::::%RANDOMIZE%

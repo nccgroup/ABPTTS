@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+	<servlet>
+		<servlet-name>%PLACEHOLDER_fileGenerationAppNameShort%</servlet-name>
+		<jsp-file>/%PLACEHOLDER_fileGenerationAppNameShort%.jsp</jsp-file>
+	</servlet>
+    
+	<servlet-mapping>
+		<servlet-name>%PLACEHOLDER_fileGenerationAppNameShort%</servlet-name>
+		<url-pattern>/%PLACEHOLDER_fileGenerationAppNameShort%/*</url-pattern>
+	</servlet-mapping>
+</web-app>
+

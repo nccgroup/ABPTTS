@@ -1,0 +1,8 @@
+# Higher-throughput settings for use when connected to the server via 
+# a LAN.
+# Using these values over slower networks (e.g. the internet) will 
+# cause significant issues
+clientToServerBlockSize:::::::6553600
+serverToClientBlockSize:::::::6553600
+#clientToServerBlockSize:::::::655360000
+#serverToClientBlockSize:::::::655360000
