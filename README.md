@@ -28,3 +28,10 @@ variety of deployment scenarios.
 This tool is released under version 2 of the GPL.
 
 [1] Currently JSP/WAR and ASP.NET server-side components are included.
+
+Compare and contrast with:
+
+- reGeorg (https://github.com/sensepost/reGeorg)
+
+- HTTP tunnel for Node.js (https://github.com/johncant/node-http-tunnel)
+
