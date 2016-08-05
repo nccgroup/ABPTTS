@@ -35,3 +35,5 @@ Compare and contrast with:
 
 - HTTP tunnel for Node.js (https://github.com/johncant/node-http-tunnel)
 
+Named as an oblique reference to Cordyceps/Ophiocordyceps, e.g.:
+http://www.insectimages.org/browse/detail.cfm?imgnum=0014287
