@@ -27,6 +27,12 @@
 	Tested successfully on:
 	
 		Apache Tomcat
+			3.3.2 (Oracle JRE 1.5.0_22 / Windows 7 / x86-64 / VMWare Fusion)
+		
+			4.1.40 (Oracle JRE 1.5.0_22 / Windows 7 / x86-64 / VMWare Fusion)
+
+			5.5.36 (Oracle JRE 1.5.0_22 / Windows 7 / x86-64 / VMWare Fusion)
+		
 			6.0.0 (Oracle JRE 1.6.0_13-b03 / OpenSolaris 9 5.11 / x86 / VMWare Fusion)
 		
 			6.0.24-45.el6 (OpenJDK 1.6.0_24 / CentOS 6.3 / x86-64 / VMWare Fusion)
